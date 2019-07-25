@@ -1,0 +1,28 @@
+---
+namespace:
+  - Lionize
+  - TaskManagement
+  - ApiModels
+models:
+  - name: BacklogTask
+    fields:
+      - name: ID
+        type: string
+      - name: Name
+        type: string
+      - name: Description
+        type: string
+      - name: Order
+        type: integer
+      - name: Subtasks
+        type: SubTask
+        array: true
+  - name: SubTask
+    fields:
+      - name: ID
+        type: integer
+      - name: Name
+        type: string
+      - name: Order
+        type: integer
+...
