@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>TIKSN.Lionize.TaskManagementService</RootNamespace>
+    <AssemblyName>TIKSN.Lionize.TaskManagementService</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
