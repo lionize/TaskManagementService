@@ -4,6 +4,16 @@ namespace:
   - TaskManagement
   - ApiModels
 models:
+  - name: LoginRequest
+    fields:
+      - name: Username
+        type: string
+      - name: Password
+        type: string
+  - name: LoginResponse
+    fields:
+      - name: AccessToken
+        type: string
   - name: BacklogTask
     fields:
       - name: ID
