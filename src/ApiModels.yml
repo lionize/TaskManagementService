@@ -4,15 +4,29 @@ namespace:
   - TaskManagement
   - ApiModels
 models:
-  - name: LoginRequest
+  - name: SignInRequest
     fields:
       - name: Username
         type: string
       - name: Password
         type: string
-  - name: LoginResponse
+  - name: SignInResponse
     fields:
       - name: AccessToken
+        type: string
+  - name: SignUpRequest
+    fields:
+      - name: Username
+        type: string
+      - name: Password
+        type: string
+  - name: SignUpResponse
+    fields:
+      - name: IsError
+        type: boolean
+      - name: IsSuccess
+        type: boolean
+      - name: ErrorMessage
         type: string
   - name: BacklogTask
     fields:
