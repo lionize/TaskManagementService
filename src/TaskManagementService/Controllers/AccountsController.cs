@@ -1,7 +1,10 @@
 ﻿using Lionize.TaskManagement.ApiModels;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using TIKSN.Lionize.TaskManagementService.Validators;
 
 namespace TaskManagementService.Controllers
 {
@@ -44,11 +47,24 @@ namespace TaskManagementService.Controllers
         [HttpPost("SignIn")]
         public async Task<SignInResponse> SignIn([FromBody]SignInRequest request)
         {
+            throw new NotImplementedException();
         }
 
         [HttpPost("SignUp")]
         public async Task<SignUpResponse> SignUp([FromBody]SignUpRequest request)
         {
+            var validator = new SignUpRequestValidator();
+
+            var validation = validator.Validate(request);
+
+            if (validation.IsValid)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                return new SignUpResponse { IsError = true, ErrorMessage = validation.Errors.First().ErrorMessage };
+            }
         }
     }
 }
