@@ -9,17 +9,6 @@ namespace TaskManagementService.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        [HttpPost("SignIn")]
-        public async Task<LoginResponse> SignIn([FromBody]LoginRequest request)
-        {
-
-        }
-
-        [HttpPost("SignUp")]
-        public async Task<LoginResponse> SignUp([FromBody]LoginRequest request)
-        {
-
-        }
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
@@ -49,6 +38,16 @@ namespace TaskManagementService.Controllers
         // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        [HttpPost("SignIn")]
+        public async Task<SignInResponse> SignIn([FromBody]SignInRequest request)
+        {
+        }
+
+        [HttpPost("SignUp")]
+        public async Task<SignUpResponse> SignUp([FromBody]SignUpRequest request)
         {
         }
     }
