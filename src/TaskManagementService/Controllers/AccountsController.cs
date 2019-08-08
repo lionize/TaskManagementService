@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Lionize.TaskManagement.ApiModels;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TaskManagementService.Controllers
 {
@@ -7,6 +9,17 @@ namespace TaskManagementService.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
+        [HttpPost("SignIn")]
+        public async Task<LoginResponse> SignIn([FromBody]LoginRequest request)
+        {
+
+        }
+
+        [HttpPost("SignUp")]
+        public async Task<LoginResponse> SignUp([FromBody]LoginRequest request)
+        {
+
+        }
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
