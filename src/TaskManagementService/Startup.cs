@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using TIKSN.Lionize.TaskManagementService.Services;
 
 namespace TIKSN.Lionize.TaskManagementService
 {
@@ -50,6 +51,8 @@ namespace TIKSN.Lionize.TaskManagementService
             {
                 c.SwaggerDoc("1.0", new OpenApiInfo { Title = "Lionize / Task Management Service", Version = "1.0" });
             });
+
+            services.AddSingleton<IAccountService, AccountService>();
         }
     }
 }
