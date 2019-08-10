@@ -5,7 +5,7 @@ namespace TIKSN.Lionize.TaskManagementService.Services
 {
     public class AccountService
     {
-        public async Task SignUpAsync(string username, string password, CancellationToken cancellationToken)
+        public async Task SignInAsync(string username, string password, CancellationToken cancellationToken)
         {
         }
     }
