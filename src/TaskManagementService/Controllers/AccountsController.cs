@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using TIKSN.Lionize.TaskManagementService.Services;
 
 namespace TaskManagementService.Controllers
 {
@@ -10,10 +11,17 @@ namespace TaskManagementService.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        [HttpPost("SignIn")]
-        public async Task<SignInResponse> SignIn([FromBody]SignInRequest request, CancellationToken cancellationToken)
+        private readonly IAccountService accountService;
+
+        public AccountsController(IAccountService accountService)
         {
-            throw new NotImplementedException();
+            this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
+        }
+
+        [HttpPost("SignIn")]
+        public Task<SignInResponse> SignIn([FromBody]SignInRequest request, CancellationToken cancellationToken)
+        {
+            return accountService.SignInAsync(request.Username, request.Password, cancellationToken);
         }
     }
 }
