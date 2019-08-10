@@ -14,6 +14,16 @@ models:
     fields:
       - name: AccessToken
         type: string
+      - name: IdentityToken
+        type: string
+      - name: TokenType
+        type: string
+      - name: RefreshToken
+        type: string
+      - name: IsError
+        type: boolean
+      - name: Error
+        type: string
   - name: BacklogTask
     fields:
       - name: ID
