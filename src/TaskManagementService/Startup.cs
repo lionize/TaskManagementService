@@ -11,6 +11,8 @@ namespace TIKSN.Lionize.TaskManagementService
 {
     public class Startup
     {
+        private readonly string AllowSpecificCorsOrigins = "_AllowSpecificCorsOrigins_";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -39,6 +41,8 @@ namespace TIKSN.Lionize.TaskManagementService
                 c.SwaggerEndpoint("/swagger/1.0/swagger.json", "API 1.0");
             });
 
+            app.UseCors(AllowSpecificCorsOrigins);
+
             app.UseHttpsRedirection();
             app.UseMvc();
         }
@@ -51,6 +55,16 @@ namespace TIKSN.Lionize.TaskManagementService
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("1.0", new OpenApiInfo { Title = "Lionize / Task Management Service", Version = "1.0" });
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(AllowSpecificCorsOrigins,
+                cpbuilder =>
+                {
+                    var origins = Configuration.GetSection("Cors").GetSection("Origins").Get<string[]>();
+                    cpbuilder.WithOrigins(origins);
+                });
             });
 
             services.Configure<AccountOptions>(Configuration.GetSection("Account"));
