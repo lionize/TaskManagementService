@@ -63,6 +63,9 @@ namespace TIKSN.Lionize.TaskManagementService
                 cpbuilder =>
                 {
                     var origins = Configuration.GetSection("Cors").GetSection("Origins").Get<string[]>();
+
+                    cpbuilder.AllowAnyMethod();
+                    cpbuilder.AllowAnyHeader();
                     cpbuilder.WithOrigins(origins);
                 });
             });
