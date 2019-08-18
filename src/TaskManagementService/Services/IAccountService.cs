@@ -1,6 +1,6 @@
-﻿using System.Threading;
+﻿using Lionize.TaskManagement.ApiModels.V1;
+using System.Threading;
 using System.Threading.Tasks;
-using Lionize.TaskManagement.ApiModels;
 
 namespace TIKSN.Lionize.TaskManagementService.Services
 {

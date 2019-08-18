@@ -1,13 +1,14 @@
-﻿using Lionize.TaskManagement.ApiModels;
+﻿using Lionize.TaskManagement.ApiModels.V1;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TIKSN.Lionize.TaskManagementService.Services;
 
-namespace TaskManagementService.Controllers
+namespace TaskManagementService.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/{version:apiVersion}/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
     {

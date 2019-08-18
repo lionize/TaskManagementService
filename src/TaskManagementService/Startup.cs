@@ -52,6 +52,9 @@ namespace TIKSN.Lionize.TaskManagementService
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddApiVersioning();
+            services.AddVersionedApiExplorer();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("1.0", new OpenApiInfo { Title = "Lionize / Task Management Service", Version = "1.0" });
@@ -64,9 +67,12 @@ namespace TIKSN.Lionize.TaskManagementService
                 {
                     var origins = Configuration.GetSection("Cors").GetSection("Origins").Get<string[]>();
 
-                    cpbuilder.AllowAnyMethod();
-                    cpbuilder.AllowAnyHeader();
-                    cpbuilder.WithOrigins(origins);
+                    if (origins != null)
+                    {
+                        cpbuilder.AllowAnyMethod();
+                        cpbuilder.AllowAnyHeader();
+                        cpbuilder.WithOrigins(origins);
+                    }
                 });
             });
 
