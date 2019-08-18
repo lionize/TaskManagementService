@@ -1,4 +1,4 @@
-﻿using Lionize.TaskManagement.ApiModels;
+﻿using Lionize.TaskManagement.ApiModels.V1;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
