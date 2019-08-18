@@ -7,7 +7,8 @@ using TIKSN.Lionize.TaskManagementService.Services;
 
 namespace TaskManagementService.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/{version:apiVersion}/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
     {
