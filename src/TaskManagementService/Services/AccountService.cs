@@ -1,5 +1,6 @@
 ﻿using IdentityModel.Client;
 using Lionize.TaskManagement.ApiModels;
+using Lionize.TaskManagement.ApiModels.V1;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
