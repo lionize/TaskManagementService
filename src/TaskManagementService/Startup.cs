@@ -77,6 +77,7 @@ namespace TIKSN.Lionize.TaskManagementService
             });
 
             services.Configure<AccountOptions>(Configuration.GetSection("Account"));
+            services.Configure<ServiceDiscoveryOptions>(Configuration.GetSection("Services"));
             services.AddSingleton<IAccountService, AccountService>();
         }
     }
