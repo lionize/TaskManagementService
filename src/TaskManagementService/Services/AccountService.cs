@@ -1,5 +1,4 @@
 ﻿using IdentityModel.Client;
-using Lionize.TaskManagement.ApiModels;
 using Lionize.TaskManagement.ApiModels.V1;
 using Microsoft.Extensions.Options;
 using System;
@@ -29,7 +28,6 @@ namespace TIKSN.Lionize.TaskManagementService.Services
 
                 ClientId = accountOptions.Value.ClientId,
                 ClientSecret = accountOptions.Value.ClientSecret,
-                //Scope = "",
 
                 UserName = username,
                 Password = password
