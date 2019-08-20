@@ -38,7 +38,7 @@ namespace TIKSN.Lionize.TaskManagementService.Services
             return new SignInResponse
             {
                 IsError = response.IsError,
-                Error = response.Error,
+                ErrorMessage = response.Error,
                 AccessToken = response.AccessToken,
                 IdentityToken = response.IdentityToken,
                 RefreshToken = response.RefreshToken,
