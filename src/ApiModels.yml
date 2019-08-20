@@ -23,7 +23,7 @@ models:
         type: string
       - name: IsError
         type: boolean
-      - name: Error
+      - name: ErrorMessage
         type: string
   - name: BacklogTask
     fields:
