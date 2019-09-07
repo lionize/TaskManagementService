@@ -1,5 +1,5 @@
 Task Publish -Depends Pack {
-   Exec { docker login docker.io  --username=tiksn }
+   Exec { docker login docker.io --username=tiksn }
    $remoteTag = "docker.io/$script:latestImageTag"
    Exec { docker tag $script:latestImageTag $remoteTag }
    Exec { docker push $remoteTag }
@@ -8,6 +8,26 @@ Task Publish -Depends Pack {
 Task Pack -Depends Build {
    $src = (Resolve-Path ".\src\").Path
    Exec { docker build -f Dockerfile $src -t $script:latestImageTag }
+}
+
+Task EstimateVersions {
+   $script:VersionTags = @()
+
+   if ($Latest) {
+       $script:VersionTags += 'latest'
+   }
+
+   if (!!($Version)) {
+       $Version = [Version]$Version
+
+       Assert ($Version.Revision -eq -1) "Version should be formatted as Major.Minor.Patch like 1.2.3"
+       Assert ($Version.Build -ne -1) "Version should be formatted as Major.Minor.Patch like 1.2.3"
+
+       $Version = $Version.ToString()
+       $script:VersionTags += $Version
+   }
+
+   Assert $script:VersionTags "No version parameter (latest or specific version) is passed."
 }
 
 Task Build -Depends TranspileModels {
