@@ -71,9 +71,25 @@ namespace TIKSN.Lionize.TaskManagementService.Services
             };
         }
 
-        public Task<SignOutResponse> SignOutAsync(string accessToken, string refreshToken, CancellationToken cancellationToken)
+        public async Task<SignOutResponse> SignOutAsync(string accessToken, string refreshToken, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var client = new HttpClient();
+
+            var response = await client.RevokeTokenAsync(new TokenRevocationRequest
+            {
+                Address = $"{serviceDiscoveryOptions.Value.Identity.BaseAddress}/connect/revocation",
+
+                ClientId = accountOptions.Value.ClientId,
+                ClientSecret = accountOptions.Value.ClientSecret,
+
+                Token = refreshToken
+            });
+
+            return new SignOutResponse
+            {
+                IsError = response.IsError,
+                ErrorMessage = response.Error,
+            };
         }
     }
 }
