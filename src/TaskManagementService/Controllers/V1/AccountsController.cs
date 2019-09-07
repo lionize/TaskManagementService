@@ -22,7 +22,7 @@ namespace TaskManagementService.Controllers.V1
         [HttpPost("Refresh")]
         public Task<RefreshTokenResponse> Refresh([FromBody]RefreshTokenRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return accountService.RefreshAsync(request.RefreshToken, cancellationToken);
         }
 
         [HttpPost("SignIn")]
@@ -34,7 +34,7 @@ namespace TaskManagementService.Controllers.V1
         [HttpPost("SignOut")]
         public Task<SignOutResponse> SignOut([FromBody]SignOutRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return accountService.SignOutAsync(request.AccessToken, request.RefreshToken, cancellationToken);
         }
     }
 }
