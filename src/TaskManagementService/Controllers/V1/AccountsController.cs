@@ -19,6 +19,12 @@ namespace TaskManagementService.Controllers.V1
             this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         }
 
+        [HttpPost("Refresh")]
+        public Task<RefreshTokenResponse> Refresh([FromBody]RefreshTokenRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpPost("SignIn")]
         public Task<SignInResponse> SignIn([FromBody]SignInRequest request, CancellationToken cancellationToken)
         {
@@ -26,7 +32,7 @@ namespace TaskManagementService.Controllers.V1
         }
 
         [HttpPost("SignOut")]
-        public Task<SignOutResponse> SignIn([FromBody]SignOutRequest request, CancellationToken cancellationToken)
+        public Task<SignOutResponse> SignOut([FromBody]SignOutRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
