@@ -1,13 +1,29 @@
 Task Publish -Depends Pack {
    Exec { docker login docker.io --username=tiksn }
-   $remoteTag = "docker.io/$script:latestImageTag"
-   Exec { docker tag $script:latestImageTag $remoteTag }
-   Exec { docker push $remoteTag }
+    foreach ($VersionTag in $script:VersionTags) {
+        $localTag = ($script:imageName + ":" + $VersionTag)
+        $remoteTag = ("docker.io/" + $localTag)
+        Exec { docker tag $localTag $remoteTag }
+        Exec { docker push $remoteTag }
+
+        try {
+            Exec { keybase chat send --nonblock --private lionize "BUILD: Published $remoteTag" }
+        }
+        catch {
+            Write-Warning "Failed to send notification"
+        }
+    }
 }
 
-Task Pack -Depends Build {
+Task Pack -Depends Build, EstimateVersions {
    $src = (Resolve-Path ".\src\").Path
-   Exec { docker build -f Dockerfile $src -t $script:latestImageTag }
+   $tagsArguments = @()
+    foreach ($VersionTag in $script:VersionTags) {
+        $tagsArguments += "-t"
+        $tagsArguments += ($script:imageName + ":" + $VersionTag)
+    }
+
+    Exec { docker build -f Dockerfile $src $tagsArguments }
 }
 
 Task EstimateVersions {
