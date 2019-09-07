@@ -20,9 +20,29 @@ namespace TIKSN.Lionize.TaskManagementService.Services
             this.serviceDiscoveryOptions = serviceDiscoveryOptions ?? throw new ArgumentNullException(nameof(serviceDiscoveryOptions));
         }
 
-        public Task<RefreshTokenResponse> RefreshAsync(string refreshToken, CancellationToken cancellationToken)
+        public async Task<RefreshTokenResponse> RefreshAsync(string refreshToken, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var client = new HttpClient();
+
+            var response = await client.RequestRefreshTokenAsync(new IdentityModel.Client.RefreshTokenRequest
+            {
+                Address = $"{serviceDiscoveryOptions.Value.Identity.BaseAddress}/connect/token",
+
+                ClientId = accountOptions.Value.ClientId,
+                ClientSecret = accountOptions.Value.ClientSecret,
+
+                RefreshToken = refreshToken
+            });
+
+            return new RefreshTokenResponse
+            {
+                IsError = response.IsError,
+                ErrorMessage = response.Error,
+                AccessToken = response.AccessToken,
+                IdentityToken = response.IdentityToken,
+                RefreshToken = response.RefreshToken,
+                TokenType = response.TokenType
+            };
         }
 
         public async Task<SignInResponse> SignInAsync(string username, string password, CancellationToken cancellationToken)
