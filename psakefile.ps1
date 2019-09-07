@@ -67,7 +67,7 @@ Task Clean -Depends Init {
 Task Init {
    $date = Get-Date
    $ticks = $date.Ticks
-   $script:latestImageTag = "tiksn/lionize-task-management-service:latest"
+   $script:imageName = "tiksn/lionize-task-management-service"
    $trashFolder = Join-Path -Path . -ChildPath ".trash"
    $script:trashFolder = Join-Path -Path $trashFolder -ChildPath $ticks.ToString("D19")
    New-Item -Path $script:trashFolder -ItemType Directory
