@@ -6,3 +6,15 @@ services:
     build:
       context: .
       dockerfile: TaskManagementService/Dockerfile
+    environment:
+      - Services__Identity__BaseAddress=http://identity
+      - ConnectionStrings__RabbitMQ=rabbitmq://rabbit:EvtNt7PKZqNNT06T@rabbitmq
+      - ApiResource__ApiName=task-api
+      - ApiResource__ApiSecret=B01SeaEDdDBGDLeqUCHuPSUhuSXsa8VEsvvEp6bfb804hLcVZ1bcJkZDB/crtsSG2xzzgiRxjZuHDsalPs2JZg==
+    networks:
+      - lionize
+
+networks:
+      lionize:
+        external:
+          name: lionize
