@@ -20,6 +20,11 @@ namespace TIKSN.Lionize.TaskManagementService.Services
             this.serviceDiscoveryOptions = serviceDiscoveryOptions ?? throw new ArgumentNullException(nameof(serviceDiscoveryOptions));
         }
 
+        public Task<RefreshTokenResponse> RefreshAsync(string refreshToken, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<SignInResponse> SignInAsync(string username, string password, CancellationToken cancellationToken)
         {
             var client = new HttpClient();
@@ -44,6 +49,11 @@ namespace TIKSN.Lionize.TaskManagementService.Services
                 RefreshToken = response.RefreshToken,
                 TokenType = response.TokenType
             };
+        }
+
+        public Task<SignOutResponse> SignOutAsync(string accessToken, string refreshToken, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }
