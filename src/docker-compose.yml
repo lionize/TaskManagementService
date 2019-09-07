@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  taskmanagementservice:
+    image: ${DOCKER_REGISTRY-}taskmanagementservice
+    build:
+      context: .
+      dockerfile: TaskManagementService/Dockerfile
