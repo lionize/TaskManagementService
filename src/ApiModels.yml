@@ -25,6 +25,36 @@ models:
         type: boolean
       - name: ErrorMessage
         type: string
+  - name: SignOutRequest
+    fields:
+      - name: AccessToken
+        type: string
+      - name: RefreshToken
+        type: string
+  - name: SignOutResponse
+    fields:
+      - name: IsError
+        type: boolean
+      - name: ErrorMessage
+        type: string
+  - name: RefreshTokenRequest
+    fields:
+      - name: RefreshToken
+        type: string
+  - name: RefreshTokenResponse
+    fields:
+      - name: AccessToken
+        type: string
+      - name: IdentityToken
+        type: string
+      - name: TokenType
+        type: string
+      - name: RefreshToken
+        type: string
+      - name: IsError
+        type: boolean
+      - name: ErrorMessage
+        type: string
   - name: BacklogTask
     fields:
       - name: ID

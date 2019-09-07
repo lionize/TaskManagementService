@@ -19,10 +19,22 @@ namespace TaskManagementService.Controllers.V1
             this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         }
 
+        [HttpPost("Refresh")]
+        public Task<RefreshTokenResponse> Refresh([FromBody]RefreshTokenRequest request, CancellationToken cancellationToken)
+        {
+            return accountService.RefreshAsync(request.RefreshToken, cancellationToken);
+        }
+
         [HttpPost("SignIn")]
         public Task<SignInResponse> SignIn([FromBody]SignInRequest request, CancellationToken cancellationToken)
         {
             return accountService.SignInAsync(request.Username, request.Password, cancellationToken);
+        }
+
+        [HttpPost("SignOut")]
+        public Task<SignOutResponse> SignOut([FromBody]SignOutRequest request, CancellationToken cancellationToken)
+        {
+            return accountService.SignOutAsync(request.AccessToken, request.RefreshToken, cancellationToken);
         }
     }
 }
