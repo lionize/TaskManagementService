@@ -24,5 +24,11 @@ namespace TaskManagementService.Controllers.V1
         {
             return accountService.SignInAsync(request.Username, request.Password, cancellationToken);
         }
+
+        [HttpPost("SignOut")]
+        public Task<SignOutResponse> SignIn([FromBody]SignOutRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
