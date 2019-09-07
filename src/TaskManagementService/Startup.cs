@@ -1,9 +1,18 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
+using MassTransit;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Reflection;
+using TIKSN.DependencyInjection;
+using TIKSN.Lionize.TaskManagementService.Business;
 using TIKSN.Lionize.TaskManagementService.Options;
 using TIKSN.Lionize.TaskManagementService.Services;
 
@@ -48,12 +57,22 @@ namespace TIKSN.Lionize.TaskManagementService
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddApiVersioning();
             services.AddVersionedApiExplorer();
+
+            services.AddMassTransit(x =>
+            {
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+                {
+                    var host = cfg.Host(new Uri(Configuration.GetConnectionString("RabbitMQ")), hostConfigurator =>
+                    {
+                    });
+                }));
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -78,7 +97,29 @@ namespace TIKSN.Lionize.TaskManagementService
 
             services.Configure<AccountOptions>(Configuration.GetSection("Account"));
             services.Configure<ServiceDiscoveryOptions>(Configuration.GetSection("Services"));
-            services.AddSingleton<IAccountService, AccountService>();
+
+            services.AddAutoMapper((provider, exp) =>
+            {
+                exp.AddProfile(new BusinessMappingProfile());
+            }, typeof(WebApiMappingProfile));
+
+            services.AddSingleton((IConfigurationRoot)Configuration);
+
+            services.AddFrameworkPlatform();
+            services.AddMediatR(typeof(BusinessAutofacModule).GetTypeInfo().Assembly);
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            ConfigureContainer(builder);
+
+            return new AutofacServiceProvider(builder.Build());
+        }
+
+        private void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterType<AccountService>()
+                .As<IAccountService>()
+                .SingleInstance();
         }
     }
 }
