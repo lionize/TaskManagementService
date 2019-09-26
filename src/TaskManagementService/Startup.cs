@@ -11,8 +11,10 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 using TIKSN.DependencyInjection;
+using TIKSN.Lionize.Messaging;
 using TIKSN.Lionize.Messaging.Options;
 using TIKSN.Lionize.TaskManagementService.Business;
+using TIKSN.Lionize.TaskManagementService.Data;
 using TIKSN.Lionize.TaskManagementService.Options;
 using TIKSN.Lionize.TaskManagementService.Services;
 
@@ -117,6 +119,11 @@ namespace TIKSN.Lionize.TaskManagementService
 
         private void ConfigureContainer(ContainerBuilder builder)
         {
+            builder.RegisterModule(new CoreModule());
+            builder.RegisterModule(new BusinessAutofacModule());
+            builder.RegisterModule(new DataAutofacModule());
+            builder.RegisterModule(new MessagingAutofacModule());
+
             builder.RegisterType<AccountService>()
                 .As<IAccountService>()
                 .SingleInstance();
