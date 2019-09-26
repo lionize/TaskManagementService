@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
-using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 using TIKSN.DependencyInjection;
+using TIKSN.Lionize.Messaging.Options;
 using TIKSN.Lionize.TaskManagementService.Business;
 using TIKSN.Lionize.TaskManagementService.Options;
 using TIKSN.Lionize.TaskManagementService.Services;
@@ -53,26 +53,20 @@ namespace TIKSN.Lionize.TaskManagementService
             app.UseCors(AllowSpecificCorsOrigins);
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(opt =>
+            {
+                opt.MapControllers();
+            });
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddApiVersioning();
             services.AddVersionedApiExplorer();
-
-            services.AddMassTransit(x =>
-            {
-                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
-                {
-                    var host = cfg.Host(new Uri(Configuration.GetConnectionString("RabbitMQ")), hostConfigurator =>
-                    {
-                    });
-                }));
-            });
 
             services.AddSwaggerGen(c =>
             {
@@ -107,6 +101,12 @@ namespace TIKSN.Lionize.TaskManagementService
 
             services.AddFrameworkPlatform();
             services.AddMediatR(typeof(BusinessAutofacModule).GetTypeInfo().Assembly);
+
+            services.Configure<ApplicationOptions>(opt =>
+            {
+                opt.ApplictionId = "TaskManagementService";
+                opt.ApplictionQueuePart = "task_management";
+            });
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
