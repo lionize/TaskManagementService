@@ -98,6 +98,9 @@ namespace TIKSN.Lionize.TaskManagementService
 
             services.AddAutoMapper((provider, exp) =>
             {
+                var bigIntegerTypeConverter = provider.GetRequiredService<BigIntegerTypeConverter>();
+                exp.CreateMap<BigInteger, string>().ConvertUsing(bigIntegerTypeConverter);
+                exp.CreateMap<string, BigInteger>().ConvertUsing(bigIntegerTypeConverter);
                 exp.AddProfile(new BusinessMappingProfile());
             }, typeof(WebApiMappingProfile));
 
