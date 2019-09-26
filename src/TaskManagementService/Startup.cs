@@ -68,6 +68,7 @@ namespace TIKSN.Lionize.TaskManagementService
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers();
 
             services.AddApiVersioning();
             services.AddVersionedApiExplorer();
