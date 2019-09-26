@@ -9,7 +9,7 @@ namespace TIKSN.Lionize.TaskManagementService.Business.MessageHandlers
 {
     public class TaskUpsertedConsumerMessageHandler : IConsumerMessageHandler<TaskUpserted>
     {
-        public Task HandleAsync(TaskUpserted message, CorrelationID correlationID, CancellationToken cancellationToken)
+        public async Task HandleAsync(TaskUpserted message, CorrelationID correlationID, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
