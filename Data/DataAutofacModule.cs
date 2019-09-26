@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using TIKSN.Data.Mongo;
+using TIKSN.Lionize.TaskManagementService.Data.Repositories;
 
 namespace TIKSN.Lionize.TaskManagementService.Data
 {
@@ -10,6 +11,11 @@ namespace TIKSN.Lionize.TaskManagementService.Data
             builder
                 .RegisterType<DatabaseProvider>()
                 .As<IMongoDatabaseProvider>()
+                .SingleInstance();
+
+            builder
+                .RegisterType<UserTaskRepository>()
+                .As<IUserTaskRepository>()
                 .SingleInstance();
         }
     }
