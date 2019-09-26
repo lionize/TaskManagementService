@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
+using Lionize.IntegrationMessages;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using System;
 using System.Reflection;
 using TIKSN.DependencyInjection;
 using TIKSN.Lionize.Messaging;
+using TIKSN.Lionize.Messaging.BackgroundServices;
 using TIKSN.Lionize.Messaging.Options;
 using TIKSN.Lionize.TaskManagementService.Business;
 using TIKSN.Lionize.TaskManagementService.Data;
@@ -109,6 +111,8 @@ namespace TIKSN.Lionize.TaskManagementService
                 opt.ApplictionId = "TaskManagementService";
                 opt.ApplictionQueuePart = "task_management";
             });
+
+            services.AddHostedService<ConsumerBackgroundService<TaskUpserted>>();
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
