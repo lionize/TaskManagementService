@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Lionize.IntegrationMessages;
+using TIKSN.Lionize.TaskManagementService.Data.Entities;
 
 namespace TIKSN.Lionize.TaskManagementService.Business
 {
@@ -6,6 +8,8 @@ namespace TIKSN.Lionize.TaskManagementService.Business
     {
         public BusinessMappingProfile()
         {
+            CreateMap<TaskUpserted, UserTaskEntity>()
+                .ReverseMap();
         }
     }
 }
