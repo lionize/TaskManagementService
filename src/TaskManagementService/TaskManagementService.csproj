@@ -11,6 +11,7 @@
 
   <PropertyGroup>
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
+    <UserSecretsId>a32ff59c-c499-46c7-b7a7-91b02a5c6a9f</UserSecretsId>
   </PropertyGroup>
   
   <ItemGroup>
