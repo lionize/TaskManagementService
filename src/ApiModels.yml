@@ -59,7 +59,7 @@ models:
     fields:
       - name: ID
         type: string
-      - name: Name
+      - name: Title
         type: string
       - name: Description
         type: string
@@ -72,7 +72,7 @@ models:
     fields:
       - name: ID
         type: integer
-      - name: Name
+      - name: Title
         type: string
       - name: Order
         type: integer
