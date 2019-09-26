@@ -23,6 +23,11 @@ namespace TIKSN.Lionize.TaskManagementService.Business
                 .RegisterType<TaskUpsertedConsumerMessageHandler>()
                 .As<IConsumerMessageHandler<TaskUpserted>>()
                 .SingleInstance();
+
+            builder
+                .RegisterType<BigIntegerTypeConverter>()
+                .AsSelf()
+                .SingleInstance();
         }
     }
 }
