@@ -6,7 +6,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 COPY ["TaskManagementService/TaskManagementService.csproj", "TaskManagementService/"]
-COPY ["../Data/Data.csproj", "../Data/"]
+COPY ["Data/Data.csproj", "Data/"]
 COPY ["Business/Business.csproj", "Business/"]
 RUN dotnet restore "TaskManagementService/TaskManagementService.csproj"
 COPY . .
