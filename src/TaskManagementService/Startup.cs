@@ -58,6 +58,10 @@ namespace TIKSN.Lionize.TaskManagementService
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(opt =>
             {
                 opt.MapControllers();
