@@ -58,6 +58,10 @@ namespace TIKSN.Lionize.TaskManagementService
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(opt =>
             {
                 opt.MapControllers();
@@ -68,6 +72,7 @@ namespace TIKSN.Lionize.TaskManagementService
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers();
 
             services.AddApiVersioning();
             services.AddVersionedApiExplorer();

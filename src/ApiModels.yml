@@ -59,7 +59,7 @@ models:
     fields:
       - name: ID
         type: string
-      - name: Name
+      - name: Title
         type: string
       - name: Description
         type: string
@@ -68,12 +68,44 @@ models:
       - name: Subtasks
         type: SubTask
         array: true
+  - name: ArchiveTask
+    fields:
+      - name: ID
+        type: string
+      - name: Title
+        type: string
+      - name: Description
+        type: string
+      - name: Order
+        type: integer
+      - name: Subtasks
+        type: SubTask
+        array: true
+  - name: MatrixTask
+    fields:
+      - name: ID
+        type: string
+      - name: Title
+        type: string
+      - name: Description
+        type: string
+      - name: Order
+        type: integer
+      - name: Subtasks
+        type: SubTask
+        array: true
+      - name: Important
+        type: boolean
+      - name: Urgent
+        type: boolean
   - name: SubTask
     fields:
       - name: ID
         type: integer
-      - name: Name
+      - name: Title
         type: string
+      - name: Completed
+        type: boolean
       - name: Order
         type: integer
 ...
