@@ -107,7 +107,7 @@ namespace TIKSN.Lionize.TaskManagementService
                 exp.CreateMap<BigInteger, string>().ConvertUsing(bigIntegerTypeConverter);
                 exp.CreateMap<string, BigInteger>().ConvertUsing(bigIntegerTypeConverter);
                 exp.AddProfile(new BusinessMappingProfile());
-            }, typeof(WebApiMappingProfile));
+            }, typeof(WebApiMappingProfile), typeof(DataMappingProfile));
 
             services.AddSingleton((IConfigurationRoot)Configuration);
 
