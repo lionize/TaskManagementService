@@ -15,14 +15,23 @@ namespace TIKSN.Lionize.TaskManagementService.Data.Repositories
         {
         }
 
-        public Task<IEnumerable<MatrixTaskEntity>> GetActiveAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<MatrixTaskEntity>> GetActiveAsync(Guid userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var filter = FilterByUser(userId)
+                & Builders<MatrixTaskEntity>.Filter.Eq(f => f.Completed, false)
+                & Builders<MatrixTaskEntity>.Filter.Ne(f => f.Important, null)
+                & Builders<MatrixTaskEntity>.Filter.Ne(f => f.Urgent, null);
+
+            return await collection.Find(filter).ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<MatrixTaskEntity>> GetBacklogTasksAsync(Guid userId, CancellationToken cancellationToken)
         {
-            return await collection.Find(FilterByUser(userId)).ToListAsync(cancellationToken).ConfigureAwait(false);
+            var filter = FilterByUser(userId)
+                & Builders<MatrixTaskEntity>.Filter.Eq(f => f.Completed, false)
+                & (Builders<MatrixTaskEntity>.Filter.Eq(f => f.Important, null) | Builders<MatrixTaskEntity>.Filter.Eq(f => f.Urgent, null));
+
+            return await collection.Find(filter).ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
         private static FilterDefinition<MatrixTaskEntity> FilterByUser(Guid userId)
