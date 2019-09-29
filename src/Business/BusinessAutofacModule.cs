@@ -4,6 +4,7 @@ using MathNet.Numerics.Random;
 using System;
 using TIKSN.Lionize.Messaging.Handlers;
 using TIKSN.Lionize.TaskManagementService.Business.MessageHandlers;
+using TIKSN.Lionize.TaskManagementService.Business.Services;
 using TIKSN.Serialization.Numerics;
 
 namespace TIKSN.Lionize.TaskManagementService.Business
@@ -27,6 +28,11 @@ namespace TIKSN.Lionize.TaskManagementService.Business
             builder
                 .RegisterType<BigIntegerTypeConverter>()
                 .AsSelf()
+                .SingleInstance();
+
+            builder
+                .RegisterType<MatrixTaskService>()
+                .As<IMatrixTaskService>()
                 .SingleInstance();
         }
     }
