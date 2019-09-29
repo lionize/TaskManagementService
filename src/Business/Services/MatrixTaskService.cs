@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TIKSN.Lionize.TaskManagementService.Data.Entities;
@@ -15,12 +16,12 @@ namespace TIKSN.Lionize.TaskManagementService.Business.Services
             _matrixTaskRepository = matrixTaskRepository ?? throw new ArgumentNullException(nameof(matrixTaskRepository));
         }
 
-        public async Task<MatrixTaskEntity[]> GetBacklogAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<MatrixTaskEntity>> GetBacklogAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _matrixTaskRepository.GetBacklogTasksAsync(userId, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<MatrixTaskEntity[]> GetActiveAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<MatrixTaskEntity>> GetActiveAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _matrixTaskRepository.GetActiveAsync(userId, cancellationToken).ConfigureAwait(false);
         }
