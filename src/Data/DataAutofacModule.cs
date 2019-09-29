@@ -17,6 +17,11 @@ namespace TIKSN.Lionize.TaskManagementService.Data
                 .RegisterType<UserTaskRepository>()
                 .As<IUserTaskRepository>()
                 .SingleInstance();
+
+            builder
+                .RegisterType<MatrixTaskRepository>()
+                .As<IMatrixTaskRepository>()
+                .SingleInstance();
         }
     }
 }
