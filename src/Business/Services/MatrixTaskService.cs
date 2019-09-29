@@ -6,7 +6,7 @@ using TIKSN.Lionize.TaskManagementService.Data.Repositories;
 
 namespace TIKSN.Lionize.TaskManagementService.Business.Services
 {
-    public class MatrixTaskService
+    public class MatrixTaskService : IMatrixTaskService
     {
         private readonly IMatrixTaskRepository _matrixTaskRepository;
 
