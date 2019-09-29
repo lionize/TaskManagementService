@@ -17,12 +17,12 @@ namespace TIKSN.Lionize.TaskManagementService.Business.Services
 
         public async Task<MatrixTaskEntity[]> GetBacklogAsync(Guid userId, CancellationToken cancellationToken)
         {
-            return await _matrixTaskRepository.GetBacklogTasksAsync(userId, cancellationToken);
+            return await _matrixTaskRepository.GetBacklogTasksAsync(userId, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<MatrixTaskEntity[]> GetActiveAsync(Guid userId, CancellationToken cancellationToken)
         {
-            return await _matrixTaskRepository.GetActiveAsync(userId, cancellationToken);
+            return await _matrixTaskRepository.GetActiveAsync(userId, cancellationToken).ConfigureAwait(false);
         }
     }
 }
