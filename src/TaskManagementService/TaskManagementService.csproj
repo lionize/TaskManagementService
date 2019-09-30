@@ -28,7 +28,7 @@
     <PackageReference Include="Serilog.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc3" />
     <PackageReference Include="TIKSN-Framework" Version="3.2.0-alpha.21" />
-    <PackageReference Include="TIKSN.Lionize.Messaging" Version="1.0.0" />
+    <PackageReference Include="TIKSN.Lionize.Messaging" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
