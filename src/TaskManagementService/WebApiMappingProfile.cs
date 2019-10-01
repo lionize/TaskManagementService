@@ -9,6 +9,7 @@ namespace TIKSN.Lionize.TaskManagementService
         public WebApiMappingProfile()
         {
             CreateMap<MatrixTaskEntity, BacklogTask>(MemberList.Destination);
+            CreateMap<MatrixTaskEntity, MatrixTask>(MemberList.Destination);
         }
     }
 }

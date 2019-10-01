@@ -27,7 +27,11 @@ namespace TIKSN.Lionize.TaskManagementService.Controllers.V1
         [HttpGet]
         public async Task<MatrixTask[]> GetMatrix(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var userId = Guid.Parse(User.FindFirst("sub").Value);
+
+            var entities = await _matrixTaskService.GetActiveAsync(userId, cancellationToken).ConfigureAwait(false);
+
+            return _mapper.Map<MatrixTask[]>(entities);
         }
 
         [HttpGet("Backlog")]
