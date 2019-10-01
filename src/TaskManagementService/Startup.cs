@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
+using IdentityServer4.AccessTokenValidation;
 using Lionize.IntegrationMessages;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -76,6 +77,29 @@ namespace TIKSN.Lionize.TaskManagementService
 
             services.AddApiVersioning();
             services.AddVersionedApiExplorer();
+
+            var servicesConfigurationSection = Configuration.GetSection("Services");
+            services.Configure<ServiceDiscoveryOptions>(servicesConfigurationSection);
+
+            var webApiResourceOptions = new WebApiResourceOptions();
+            Configuration.GetSection("ApiResource").Bind(webApiResourceOptions);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddIdentityServerAuthentication(options =>
+            {
+                var serviceDiscoveryOptions = new ServiceDiscoveryOptions();
+                servicesConfigurationSection.Bind(serviceDiscoveryOptions);
+
+                options.Authority = $"{serviceDiscoveryOptions.Identity.BaseAddress}";
+                options.RequireHttpsMetadata = false;
+
+                options.ApiName = webApiResourceOptions.ApiName;
+                options.ApiSecret = webApiResourceOptions.ApiSecret;
+            });
 
             services.AddSwaggerGen(c =>
             {
