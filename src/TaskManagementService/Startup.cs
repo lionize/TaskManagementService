@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using IdentityServer4.AccessTokenValidation;
 using Lionize.IntegrationMessages;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using System;
 using System.Reflection;
 using TIKSN.DependencyInjection;
 using TIKSN.Lionize.Messaging;
@@ -55,10 +53,10 @@ namespace TIKSN.Lionize.TaskManagementService
                 c.SwaggerEndpoint("/swagger/1.0/swagger.json", "API 1.0");
             });
 
-            app.UseCors(AllowSpecificCorsOrigins);
-
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseCors(AllowSpecificCorsOrigins);
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -70,7 +68,7 @@ namespace TIKSN.Lionize.TaskManagementService
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddControllers();
@@ -145,15 +143,9 @@ namespace TIKSN.Lionize.TaskManagementService
             });
 
             services.AddHostedService<ConsumerBackgroundService<TaskUpserted>>();
-
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-            ConfigureContainer(builder);
-
-            return new AutofacServiceProvider(builder.Build());
         }
 
-        private void ConfigureContainer(ContainerBuilder builder)
+        public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new CoreModule());
             builder.RegisterModule(new BusinessAutofacModule());
