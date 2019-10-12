@@ -1,0 +1,19 @@
+---
+namespace:
+  - Lionize
+  - TaskManagement
+  - RealtimeModels
+models:
+  - name: MoveToMatrixRequest
+    fields:
+      - name: TaskId
+        type: string
+      - name: Important
+        type: boolean
+      - name: Urgent
+        type: boolean
+  - name: MoveToBacklogRequest
+    fields:
+      - name: TaskId
+        type: string
+...
