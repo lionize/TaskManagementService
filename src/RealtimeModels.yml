@@ -8,6 +8,8 @@ models:
     fields:
       - name: TaskId
         type: string
+      - name: Order
+        type: integer
       - name: Important
         type: boolean
       - name: Urgent
@@ -16,4 +18,6 @@ models:
     fields:
       - name: TaskId
         type: string
+      - name: Order
+        type: integer
 ...
