@@ -19,19 +19,25 @@ namespace TIKSN.Lionize.TaskManagementService.Hubs
 
         public Task MoveToBacklog(MoveToBacklogRequest request)
         {
+            var userId = Guid.Parse(Context.User.FindFirst("sub").Value);
+
             return _matrixTaskOrderingService.MoveToBacklog(
                 request.TaskId,
                 request.Order,
+                userId,
                 Context.ConnectionAborted);
         }
 
         public Task MoveToMatrix(MoveToMatrixRequest request)
         {
+            var userId = Guid.Parse(Context.User.FindFirst("sub").Value);
+
             return _matrixTaskOrderingService.MoveToMatrix(
                 request.TaskId,
                 request.Important,
                 request.Urgent,
                 request.Order,
+                userId,
                 Context.ConnectionAborted);
         }
     }
