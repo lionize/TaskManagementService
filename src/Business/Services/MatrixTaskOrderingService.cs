@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TIKSN.Lionize.TaskManagementService.Data.Entities;
 using TIKSN.Lionize.TaskManagementService.Data.Repositories;
 
 namespace TIKSN.Lionize.TaskManagementService.Business.Services
@@ -11,17 +14,47 @@ namespace TIKSN.Lionize.TaskManagementService.Business.Services
 
         public MatrixTaskOrderingService(IMatrixTaskRepository matrixTaskRepository)
         {
-            this._matrixTaskRepository = matrixTaskRepository ?? throw new ArgumentNullException(nameof(matrixTaskRepository));
+            _matrixTaskRepository = matrixTaskRepository ?? throw new ArgumentNullException(nameof(matrixTaskRepository));
         }
 
-        public Task MoveToBacklog(string id, int order, Guid userID, CancellationToken cancellationToken)
+        public async Task MoveToBacklog(string id, int order, Guid userID, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var matrixTask = await _matrixTaskRepository.GetAsync(id, cancellationToken);
+            var backlogTasks = await _matrixTaskRepository.GetBacklogTasksAsync(userID, cancellationToken);
+
+            matrixTask.Important = null;
+            matrixTask.Urgent = null;
+
+            await InsertMatrixTaskAsync(matrixTask, order, backlogTasks, cancellationToken);
         }
 
-        public Task MoveToMatrix(string id, bool important, bool urgent, int order, Guid userID, CancellationToken cancellationToken)
+        public async Task MoveToMatrix(string id, bool important, bool urgent, int order, Guid userID, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var matrixTask = await _matrixTaskRepository.GetAsync(id, cancellationToken);
+            var quadrantTasks = await _matrixTaskRepository.GetMatrixQuadrantAsync(userID, important, urgent, cancellationToken);
+
+            matrixTask.Important = important;
+            matrixTask.Urgent = urgent;
+
+            await InsertMatrixTaskAsync(matrixTask, order, quadrantTasks, cancellationToken);
+        }
+
+        private async Task InsertMatrixTaskAsync(
+            MatrixTaskEntity matrixTask,
+            int order,
+            IEnumerable<MatrixTaskEntity> sectionTasks,
+            CancellationToken cancellationToken)
+        {
+            if (sectionTasks.Any(x => x.Order == order))
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                matrixTask.Order = order;
+
+                await _matrixTaskRepository.UpdateAsync(matrixTask, cancellationToken);
+            }
         }
     }
 }
