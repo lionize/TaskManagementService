@@ -1,22 +1,38 @@
 ﻿using Lionize.TaskManagement.RealtimeModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using System.Threading;
+using System;
 using System.Threading.Tasks;
+using TIKSN.Lionize.TaskManagementService.Business.Services;
 
 namespace TIKSN.Lionize.TaskManagementService.Hubs
 {
     [Authorize]
     public class MatrixHub : Hub<IMatrixHubClient>
     {
-        public Task MoveToBacklog(MoveToBacklogRequest request, CancellationToken cancellationToken)
+        private readonly IMatrixTaskOrderingService _matrixTaskOrderingService;
+
+        public MatrixHub(IMatrixTaskOrderingService matrixTaskOrderingService)
         {
-            throw new HubException("Not implemented yet.");
+            _matrixTaskOrderingService = matrixTaskOrderingService ?? throw new ArgumentNullException(nameof(matrixTaskOrderingService));
         }
 
-        public Task MoveToMatrix(MoveToMatrixRequest request, CancellationToken cancellationToken)
+        public Task MoveToBacklog(MoveToBacklogRequest request)
         {
-            throw new HubException("Not implemented yet.");
+            return _matrixTaskOrderingService.MoveToBacklog(
+                request.TaskId,
+                request.Order,
+                Context.ConnectionAborted);
+        }
+
+        public Task MoveToMatrix(MoveToMatrixRequest request)
+        {
+            return _matrixTaskOrderingService.MoveToMatrix(
+                request.TaskId,
+                request.Important,
+                request.Urgent,
+                request.Order,
+                Context.ConnectionAborted);
         }
     }
 }
