@@ -34,6 +34,11 @@ namespace TIKSN.Lionize.TaskManagementService.Business
                 .RegisterType<MatrixTaskService>()
                 .As<IMatrixTaskService>()
                 .SingleInstance();
+
+            builder
+                .RegisterType<MatrixTaskOrderingService>()
+                .As<IMatrixTaskOrderingService>()
+                .SingleInstance();
         }
     }
 }
