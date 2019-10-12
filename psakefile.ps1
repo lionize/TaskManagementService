@@ -59,6 +59,10 @@ Task TranspileModels -Depends Init,Clean {
    $apiModelYaml = (Resolve-Path ".\src\ApiModels.yml").Path
    $apiModelOutput = Join-Path -Path ".\src\TaskManagementService" -ChildPath "Models"
    Exec { smite --input-file $apiModelYaml --lang csharp --field property --output-folder $apiModelOutput }
+
+   $realtimeModelYaml = (Resolve-Path ".\src\RealtimeModels.yml").Path
+   $realtimeModelOutput = Join-Path -Path ".\src\TaskManagementService" -ChildPath "RealtimeModels"
+   Exec { smite --input-file $realtimeModelYaml --lang csharp --field property --output-folder $realtimeModelOutput }
 }
 
 Task Clean -Depends Init {
