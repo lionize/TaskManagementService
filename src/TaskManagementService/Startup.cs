@@ -16,6 +16,7 @@ using TIKSN.Lionize.Messaging.BackgroundServices;
 using TIKSN.Lionize.Messaging.Options;
 using TIKSN.Lionize.TaskManagementService.Business;
 using TIKSN.Lionize.TaskManagementService.Data;
+using TIKSN.Lionize.TaskManagementService.Hubs;
 using TIKSN.Lionize.TaskManagementService.Options;
 using TIKSN.Lionize.TaskManagementService.Services;
 
@@ -64,6 +65,7 @@ namespace TIKSN.Lionize.TaskManagementService
             app.UseEndpoints(opt =>
             {
                 opt.MapControllers();
+                opt.MapHub<MatrixHub>("/Hubs/Matrix");
             });
         }
 
@@ -142,6 +144,8 @@ namespace TIKSN.Lionize.TaskManagementService
             });
 
             services.AddHostedService<ConsumerBackgroundService<TaskUpserted>>();
+
+            services.AddSignalR();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

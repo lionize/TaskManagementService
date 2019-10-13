@@ -34,9 +34,14 @@ namespace TIKSN.Lionize.TaskManagementService.Data.Repositories
             return await collection.Find(filter).ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private static FilterDefinition<MatrixTaskEntity> FilterByUser(Guid userId)
+        public async Task<IEnumerable<MatrixTaskEntity>> GetMatrixQuadrantAsync(Guid userId, bool important, bool urgent, CancellationToken cancellationToken)
         {
-            return Builders<MatrixTaskEntity>.Filter.Eq(f => f.UserID, userId);
+            var filter = FilterByUser(userId)
+                & Builders<MatrixTaskEntity>.Filter.Eq(f => f.Completed, false)
+                & Builders<MatrixTaskEntity>.Filter.Ne(f => f.Important, important)
+                & Builders<MatrixTaskEntity>.Filter.Ne(f => f.Urgent, urgent);
+
+            return await collection.Find(filter).ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<int> GetMaxOrderOrDefaultAsync(Guid userID, CancellationToken cancellationToken)
@@ -49,6 +54,11 @@ namespace TIKSN.Lionize.TaskManagementService.Data.Repositories
             }
 
             return orders.Max();
+        }
+
+        private static FilterDefinition<MatrixTaskEntity> FilterByUser(Guid userId)
+        {
+            return Builders<MatrixTaskEntity>.Filter.Eq(f => f.UserID, userId);
         }
     }
 }
