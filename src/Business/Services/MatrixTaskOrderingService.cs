@@ -47,14 +47,24 @@ namespace TIKSN.Lionize.TaskManagementService.Business.Services
         {
             if (sectionTasks.Any(x => x.Order == order))
             {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                matrixTask.Order = order;
+                var toReorder = sectionTasks
+                    .Where(x => x.Order >= order)
+                    .OrderBy(x => order)
+                    .ToArray();
 
-                await _matrixTaskRepository.UpdateAsync(matrixTask, cancellationToken);
+                toReorder = toReorder
+                    .TakeWhile((x, i) => i == 0 ? true : (x.Order - toReorder[i - 1].Order) <= 1)
+                    .ToArray();
+
+                toReorder
+                    .ForEach(x => x.Order++);
+
+                await _matrixTaskRepository.UpdateRangeAsync(toReorder, cancellationToken).ConfigureAwait(false);
             }
+
+            matrixTask.Order = order;
+
+            await _matrixTaskRepository.UpdateAsync(matrixTask, cancellationToken).ConfigureAwait(false);
         }
     }
 }
