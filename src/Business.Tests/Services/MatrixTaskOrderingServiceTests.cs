@@ -69,7 +69,8 @@ namespace TIKSN.Lionize.TaskManagementService.Business.Services.Tests
                 fixture.Create<Guid>(),
                 default).ConfigureAwait(false);
 
-            quadrantTasks.Single(x => x.ID == "1463984414").Order.Should().Be(4);
+            var matrixTask = await matrixTaskRepository.GetAsync("1463984414", default).ConfigureAwait(false);
+            matrixTask.Order.Should().Be(4);
 
             quadrantTasks.Single(x => x.ID == "1827481110").Order.Should().Be(1);
             quadrantTasks.Single(x => x.ID == "1047090038").Order.Should().Be(2);
