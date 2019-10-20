@@ -2,6 +2,7 @@
 using Lionize.TaskManagement.ApiModels.V1;
 using Microsoft.Extensions.Options;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace TIKSN.Lionize.TaskManagementService.Services
                 ClientSecret = accountOptions.Value.ClientSecret,
 
                 RefreshToken = refreshToken
-            });
+            }).ConfigureAwait(false);
 
             return new RefreshTokenResponse
             {
@@ -41,7 +42,8 @@ namespace TIKSN.Lionize.TaskManagementService.Services
                 AccessToken = response.AccessToken,
                 IdentityToken = response.IdentityToken,
                 RefreshToken = response.RefreshToken,
-                TokenType = response.TokenType
+                TokenType = response.TokenType,
+                DisplayName = await GetDisplayNameAsync(response.AccessToken, cancellationToken)
             };
         }
 
@@ -58,7 +60,7 @@ namespace TIKSN.Lionize.TaskManagementService.Services
 
                 UserName = username,
                 Password = password
-            });
+            }).ConfigureAwait(false);
 
             return new SignInResponse
             {
@@ -67,7 +69,8 @@ namespace TIKSN.Lionize.TaskManagementService.Services
                 AccessToken = response.AccessToken,
                 IdentityToken = response.IdentityToken,
                 RefreshToken = response.RefreshToken,
-                TokenType = response.TokenType
+                TokenType = response.TokenType,
+                DisplayName = await GetDisplayNameAsync(response.AccessToken, cancellationToken)
             };
         }
 
@@ -83,13 +86,32 @@ namespace TIKSN.Lionize.TaskManagementService.Services
                 ClientSecret = accountOptions.Value.ClientSecret,
 
                 Token = refreshToken
-            });
+            }).ConfigureAwait(false);
 
             return new SignOutResponse
             {
                 IsError = response.IsError,
                 ErrorMessage = response.Error,
             };
+        }
+
+        private async Task<string> GetDisplayNameAsync(string accessToken, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(accessToken))
+                return null;
+
+            var client = new HttpClient();
+            var userInfo = await client.GetUserInfoAsync(new UserInfoRequest
+            {
+                Address = $"{serviceDiscoveryOptions.Value.Identity.BaseAddress}/connect/userinfo",
+
+                Token = accessToken,
+
+                ClientId = accountOptions.Value.ClientId,
+                ClientSecret = accountOptions.Value.ClientSecret,
+            }, cancellationToken).ConfigureAwait(false);
+
+            return userInfo.TryGet("preferred_username");
         }
     }
 }

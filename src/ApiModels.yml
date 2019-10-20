@@ -21,6 +21,8 @@ models:
         type: string
       - name: RefreshToken
         type: string
+      - name: DisplayName
+        type: string
       - name: IsError
         type: boolean
       - name: ErrorMessage
@@ -50,6 +52,8 @@ models:
       - name: TokenType
         type: string
       - name: RefreshToken
+        type: string
+      - name: DisplayName
         type: string
       - name: IsError
         type: boolean
