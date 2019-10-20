@@ -116,6 +116,7 @@ namespace TIKSN.Lionize.TaskManagementService
                     {
                         cpbuilder.AllowAnyMethod();
                         cpbuilder.AllowAnyHeader();
+                        cpbuilder.AllowCredentials();
                         cpbuilder.WithOrigins(origins);
                     }
                 });
