@@ -150,7 +150,7 @@ namespace TIKSN.Lionize.TaskManagementService
 
             services.AddHostedService<ConsumerBackgroundService<TaskUpserted>>();
 
-            services.AddSignalR();
+            services.AddSignalR(opt => opt.EnableDetailedErrors = true);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

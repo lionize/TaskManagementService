@@ -24,7 +24,7 @@ namespace TIKSN.Lionize.TaskManagementService
                         .UseSerilog((context, configuration) =>
                         {
                             configuration
-                                .MinimumLevel.Debug()
+                                .MinimumLevel.Verbose()
                                 //.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                                 //.MinimumLevel.Override("System", LogEventLevel.Warning)
                                 //.MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
