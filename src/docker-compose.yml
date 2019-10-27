@@ -10,6 +10,7 @@ services:
       - Services__Identity__BaseAddress=http://identity
       - ConnectionStrings__Mongo=mongodb://root:Xq5xrtzEKj44ueyd@mongo:27017/TaskManagementService?authSource=admin
       - ConnectionStrings__RabbitMQ=amqp://rabbit:EvtNt7PKZqNNT06T@rabbitmq
+      - Logs__Seq__BaseAddress=http://seq
       - ApiResource__ApiName=task-api
       - ApiResource__ApiSecret=B01SeaEDdDBGDLeqUCHuPSUhuSXsa8VEsvvEp6bfb804hLcVZ1bcJkZDB/crtsSG2xzzgiRxjZuHDsalPs2JZg==
       - Account__ClientId=UserManagementClient
