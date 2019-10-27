@@ -104,9 +104,33 @@ namespace TIKSN.Lionize.TaskManagementService
                 options.ApiSecret = webApiResourceOptions.ApiSecret;
             });
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("1.0", new OpenApiInfo { Title = "Lionize / Task Management Service", Version = "1.0" });
+                options.EnableAnnotations();
+
+                options.MapType<PathString>(() => new OpenApiSchema { Type = "string" });
+                options.MapType<Type>(() => new OpenApiSchema { Type = "string" });
+
+                options.SwaggerDoc("1.0", new OpenApiInfo { Title = "Lionize / Task Management Service", Version = "1.0" });
+
+                var def = new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
+
+                options.AddSecurityDefinition("Bearer", def);
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {def, new List<string>()}
+                });
             });
 
             services.AddCors(options =>
