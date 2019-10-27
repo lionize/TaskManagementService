@@ -1,9 +1,11 @@
 ﻿using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using System;
 using System.Threading.Tasks;
 using TIKSN.Lionize.Messaging.Services;
 
@@ -27,7 +29,15 @@ namespace TIKSN.Lionize.TaskManagementService
                                 //.MinimumLevel.Override("System", LogEventLevel.Warning)
                                 //.MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                                 .Enrich.FromLogContext()
+                                .Enrich.WithProperty("ApplictionName", "TaskManagementService")
+                                .Enrich.WithProperty("ApplictionInstance", Guid.NewGuid())
                                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate);
+
+                            var baseAddress = context.Configuration.GetSection("Logs").GetSection("Seq").GetValue<string>("BaseAddress");
+                            if (!string.IsNullOrEmpty(baseAddress))
+                            {
+                                configuration.WriteTo.Seq(baseAddress);
+                            }
                         });
                 });
         }
