@@ -5,10 +5,13 @@ using Lionize.IntegrationMessages;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 using TIKSN.DependencyInjection;
 using TIKSN.Lionize.Messaging;
@@ -78,8 +81,16 @@ namespace TIKSN.Lionize.TaskManagementService
                 opt.JsonSerializerOptions.DictionaryKeyPolicy = null;
             });
 
-            services.AddApiVersioning();
-            services.AddVersionedApiExplorer();
+            services.AddApiVersioning(o =>
+            {
+                o.AssumeDefaultVersionWhenUnspecified = false;
+                o.ReportApiVersions = true;
+            });
+            services.AddVersionedApiExplorer(o =>
+            {
+                o.AssumeDefaultVersionWhenUnspecified = false;
+                o.SubstituteApiVersionInUrl = true;
+            });
 
             var servicesConfigurationSection = Configuration.GetSection("Services");
             services.Configure<ServiceDiscoveryOptions>(servicesConfigurationSection);
@@ -104,9 +115,33 @@ namespace TIKSN.Lionize.TaskManagementService
                 options.ApiSecret = webApiResourceOptions.ApiSecret;
             });
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("1.0", new OpenApiInfo { Title = "Lionize / Task Management Service", Version = "1.0" });
+                options.EnableAnnotations();
+
+                options.MapType<PathString>(() => new OpenApiSchema { Type = "string" });
+                options.MapType<Type>(() => new OpenApiSchema { Type = "string" });
+
+                options.SwaggerDoc("1.0", new OpenApiInfo { Title = "Lionize / Task Management Service", Version = "1.0" });
+
+                var def = new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
+
+                options.AddSecurityDefinition("Bearer", def);
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {def, new List<string>()}
+                });
             });
 
             services.AddCors(options =>
@@ -150,7 +185,7 @@ namespace TIKSN.Lionize.TaskManagementService
 
             services.AddHostedService<ConsumerBackgroundService<TaskUpserted>>();
 
-            services.AddSignalR();
+            services.AddSignalR(opt => opt.EnableDetailedErrors = true);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
