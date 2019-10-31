@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using TIKSN.DependencyInjection;
 using TIKSN.Lionize.Messaging;
 using TIKSN.Lionize.Messaging.BackgroundServices;
@@ -72,6 +74,18 @@ namespace TIKSN.Lionize.TaskManagementService
             });
         }
 
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new CoreModule());
+            builder.RegisterModule(new BusinessAutofacModule());
+            builder.RegisterModule(new DataAutofacModule());
+            builder.RegisterModule(new MessagingAutofacModule());
+
+            builder.RegisterType<AccountService>()
+                .As<IAccountService>()
+                .SingleInstance();
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -95,6 +109,9 @@ namespace TIKSN.Lionize.TaskManagementService
             var servicesConfigurationSection = Configuration.GetSection("Services");
             services.Configure<ServiceDiscoveryOptions>(servicesConfigurationSection);
 
+            var serviceDiscoveryOptions = new ServiceDiscoveryOptions();
+            servicesConfigurationSection.Bind(serviceDiscoveryOptions);
+
             var webApiResourceOptions = new WebApiResourceOptions();
             Configuration.GetSection("ApiResource").Bind(webApiResourceOptions);
 
@@ -105,14 +122,23 @@ namespace TIKSN.Lionize.TaskManagementService
             })
             .AddIdentityServerAuthentication(options =>
             {
-                var serviceDiscoveryOptions = new ServiceDiscoveryOptions();
-                servicesConfigurationSection.Bind(serviceDiscoveryOptions);
-
                 options.Authority = $"{serviceDiscoveryOptions.Identity.BaseAddress}";
                 options.RequireHttpsMetadata = false;
 
                 options.ApiName = webApiResourceOptions.ApiName;
                 options.ApiSecret = webApiResourceOptions.ApiSecret;
+
+                options.JwtBearerEvents.OnMessageReceived = context =>
+                {
+                    if (context.Request.Query.TryGetValue("access_token", out StringValues token) && context.Request.Path.StartsWithSegments("/hubs", StringComparison.OrdinalIgnoreCase))
+                    {
+                        //context.Options.Authority = $"{serviceDiscoveryOptions.Identity.BaseAddress}";
+                        context.Token = token.Single();
+                        //context.Options.Validate();
+                    }
+
+                    return Task.CompletedTask;
+                };
             });
 
             services.AddSwaggerGen(options =>
@@ -186,18 +212,6 @@ namespace TIKSN.Lionize.TaskManagementService
             services.AddHostedService<ConsumerBackgroundService<TaskUpserted>>();
 
             services.AddSignalR(opt => opt.EnableDetailedErrors = true);
-        }
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder.RegisterModule(new CoreModule());
-            builder.RegisterModule(new BusinessAutofacModule());
-            builder.RegisterModule(new DataAutofacModule());
-            builder.RegisterModule(new MessagingAutofacModule());
-
-            builder.RegisterType<AccountService>()
-                .As<IAccountService>()
-                .SingleInstance();
         }
     }
 }
