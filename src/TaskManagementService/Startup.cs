@@ -42,17 +42,6 @@ namespace TIKSN.Lionize.TaskManagementService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production
-                // scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
@@ -60,7 +49,6 @@ namespace TIKSN.Lionize.TaskManagementService
                 c.SwaggerEndpoint("/swagger/1.0/swagger.json", "API 1.0");
             });
 
-            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseCors(AllowSpecificCorsOrigins);
