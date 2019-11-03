@@ -6,16 +6,12 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using TIKSN.DependencyInjection;
 using TIKSN.Lionize.Messaging;
 using TIKSN.Lionize.Messaging.BackgroundServices;
@@ -23,6 +19,7 @@ using TIKSN.Lionize.Messaging.Options;
 using TIKSN.Lionize.TaskManagementService.Business;
 using TIKSN.Lionize.TaskManagementService.Data;
 using TIKSN.Lionize.TaskManagementService.Hubs;
+using TIKSN.Lionize.TaskManagementService.Middlewares;
 using TIKSN.Lionize.TaskManagementService.Options;
 using TIKSN.Lionize.TaskManagementService.Services;
 
@@ -42,17 +39,6 @@ namespace TIKSN.Lionize.TaskManagementService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production
-                // scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
@@ -60,11 +46,11 @@ namespace TIKSN.Lionize.TaskManagementService
                 c.SwaggerEndpoint("/swagger/1.0/swagger.json", "API 1.0");
             });
 
-            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseCors(AllowSpecificCorsOrigins);
 
+            app.UseMiddleware<WebSocketsMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -128,18 +114,6 @@ namespace TIKSN.Lionize.TaskManagementService
 
                 options.ApiName = webApiResourceOptions.ApiName;
                 options.ApiSecret = webApiResourceOptions.ApiSecret;
-
-                options.JwtBearerEvents.OnMessageReceived = context =>
-                {
-                    if (context.Request.Query.TryGetValue("access_token", out StringValues token) && context.Request.Path.StartsWithSegments("/hubs", StringComparison.OrdinalIgnoreCase))
-                    {
-                        //context.Options.Authority = $"{serviceDiscoveryOptions.Identity.BaseAddress}";
-                        context.Token = token.Single();
-                        //context.Options.Validate();
-                    }
-
-                    return Task.CompletedTask;
-                };
             });
 
             services.AddSwaggerGen(options =>
