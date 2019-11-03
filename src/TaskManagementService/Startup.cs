@@ -6,7 +6,6 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
@@ -23,6 +22,7 @@ using TIKSN.Lionize.Messaging.Options;
 using TIKSN.Lionize.TaskManagementService.Business;
 using TIKSN.Lionize.TaskManagementService.Data;
 using TIKSN.Lionize.TaskManagementService.Hubs;
+using TIKSN.Lionize.TaskManagementService.Middlewares;
 using TIKSN.Lionize.TaskManagementService.Options;
 using TIKSN.Lionize.TaskManagementService.Services;
 
@@ -53,6 +53,7 @@ namespace TIKSN.Lionize.TaskManagementService
 
             app.UseCors(AllowSpecificCorsOrigins);
 
+            app.UseMiddleware<WebSocketsMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 
