@@ -8,13 +8,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using TIKSN.DependencyInjection;
 using TIKSN.Lionize.Messaging;
 using TIKSN.Lionize.Messaging.BackgroundServices;
@@ -117,18 +114,6 @@ namespace TIKSN.Lionize.TaskManagementService
 
                 options.ApiName = webApiResourceOptions.ApiName;
                 options.ApiSecret = webApiResourceOptions.ApiSecret;
-
-                options.JwtBearerEvents.OnMessageReceived = context =>
-                {
-                    if (context.Request.Query.TryGetValue("access_token", out StringValues token) && context.Request.Path.StartsWithSegments("/hubs", StringComparison.OrdinalIgnoreCase))
-                    {
-                        //context.Options.Authority = $"{serviceDiscoveryOptions.Identity.BaseAddress}";
-                        context.Token = token.Single();
-                        //context.Options.Validate();
-                    }
-
-                    return Task.CompletedTask;
-                };
             });
 
             services.AddSwaggerGen(options =>
