@@ -4,11 +4,11 @@ using System;
 namespace TIKSN.Lionize.TaskManagementService.Business.Notifications
 {
     /// <summary>
-    /// Notifies user task created or updated
+    /// Notifies about matrix task movement
     /// </summary>
-    public class TaskChangedNotification : INotification
+    public class TaskMovedNotification : INotification
     {
-        public TaskChangedNotification(string taskID)
+        public TaskMovedNotification(string taskID)
         {
             TaskID = taskID ?? throw new ArgumentNullException(nameof(taskID));
         }
