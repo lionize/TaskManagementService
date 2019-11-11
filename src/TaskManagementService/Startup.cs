@@ -176,7 +176,7 @@ namespace TIKSN.Lionize.TaskManagementService
             services.AddSingleton((IConfigurationRoot)Configuration);
 
             services.AddFrameworkPlatform();
-            services.AddMediatR(typeof(BusinessAutofacModule).GetTypeInfo().Assembly);
+            services.AddMediatR(typeof(BusinessAutofacModule).GetTypeInfo().Assembly, GetType().Assembly);
 
             services.Configure<ApplicationOptions>(opt =>
             {
