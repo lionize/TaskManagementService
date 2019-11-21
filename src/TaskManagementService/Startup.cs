@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -187,6 +188,8 @@ namespace TIKSN.Lionize.TaskManagementService
             services.AddHostedService<ConsumerBackgroundService<TaskUpserted>>();
 
             services.AddSignalR(opt => opt.EnableDetailedErrors = true);
+
+            services.AddSingleton<IUserIdProvider, SubjectIdProvider>();
         }
     }
 }
