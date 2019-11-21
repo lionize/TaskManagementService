@@ -2,6 +2,7 @@
 using Lionize.TaskManagement.ApiModels.V1;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,12 +17,18 @@ namespace TIKSN.Lionize.TaskManagementService.NotificationHandlers
         private readonly IMapper _mapper;
         private readonly IHubContext<MatrixHub, IMatrixHubClient> _matrixHubClientContext;
         private readonly IMatrixTaskRepository _matrixTaskRepository;
+        private readonly ILogger<TaskMovedNotificationHandler> _logger;
 
-        public TaskMovedNotificationHandler(IMatrixTaskRepository matrixTaskRepository, IHubContext<MatrixHub, IMatrixHubClient> matrixHubClientContext, IMapper mapper)
+        public TaskMovedNotificationHandler(
+            IMatrixTaskRepository matrixTaskRepository,
+            IHubContext<MatrixHub, IMatrixHubClient> matrixHubClientContext,
+            IMapper mapper,
+            ILogger<TaskMovedNotificationHandler> logger)
         {
             _matrixTaskRepository = matrixTaskRepository ?? throw new ArgumentNullException(nameof(matrixTaskRepository));
             _matrixHubClientContext = matrixHubClientContext ?? throw new ArgumentNullException(nameof(matrixHubClientContext));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task Handle(TaskMovedNotification notification, CancellationToken cancellationToken)
