@@ -5,7 +5,12 @@ namespace TIKSN.Lionize.TaskManagementService.Data.Repositories
 {
     public class UserTaskRepository : MongoRepository<UserTaskEntity, string>, IUserTaskRepository
     {
-        public UserTaskRepository(IMongoDatabaseProvider mongoDatabaseProvider) : base(mongoDatabaseProvider, "UserTasks")
+        public UserTaskRepository(
+            IMongoClientSessionProvider mongoClientSessionProvider,
+            IMongoDatabaseProvider mongoDatabaseProvider) : base(
+                mongoClientSessionProvider,
+                mongoDatabaseProvider,
+                "UserTasks")
         {
         }
     }
