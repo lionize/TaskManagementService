@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TIKSN.Lionize.TaskManagementService.Services;
 
-namespace TaskManagementService.Controllers.V1
+namespace TIKSN.Lionize.TaskManagementService.Controllers.V1
 {
     [ApiVersion("1.0")]
     [Route("api/{version:apiVersion}/[controller]")]

@@ -11,7 +11,12 @@ namespace TIKSN.Lionize.TaskManagementService.Data.Repositories
 {
     public class MatrixTaskRepository : MongoRepository<MatrixTaskEntity, string>, IMatrixTaskRepository
     {
-        public MatrixTaskRepository(IMongoDatabaseProvider mongoDatabaseProvider) : base(mongoDatabaseProvider, "MatrixTasks")
+        public MatrixTaskRepository(
+            IMongoClientSessionProvider mongoClientSessionProvider,
+            IMongoDatabaseProvider mongoDatabaseProvider) : base(
+                mongoClientSessionProvider,
+                mongoDatabaseProvider,
+                "MatrixTasks")
         {
         }
 
