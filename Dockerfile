@@ -12,7 +12,7 @@ COPY . ./
 RUN dotnet publish -c Release -o out TaskManagementService/TaskManagementService.csproj
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0.3
+FROM mcr.microsoft.com/dotnet/aspnet:7.0.4
 WORKDIR /app
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "TIKSN.Lionize.TaskManagementService.dll"]
