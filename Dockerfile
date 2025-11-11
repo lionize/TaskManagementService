@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0.306 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:10.0.100 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
@@ -12,7 +12,7 @@ COPY . ./
 RUN dotnet publish -c Release -o out TaskManagementService/TaskManagementService.csproj
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0.10
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "TIKSN.Lionize.TaskManagementService.dll"]
