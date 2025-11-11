@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Tests/">
+    <Project Path="Business.Tests/Business.Tests.csproj" />
+  </Folder>
+  <Project Path="Business/Business.csproj" />
+  <Project Path="Data/Data.csproj" />
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+  <Project Path="TaskManagementService/TaskManagementService.csproj" />
+</Solution>
